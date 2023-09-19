@@ -1,0 +1,8 @@
+#Installing Ansible on the control node
+#connect to the server(control node) you want to install Ansible on
+
+ssh user@server_ip
+
+#first we need to install epel-release repository
+
+sudo yum install -y epel-release
