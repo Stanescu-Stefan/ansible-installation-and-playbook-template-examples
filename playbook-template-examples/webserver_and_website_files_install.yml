@@ -1,0 +1,13 @@
+---
+- name: install Apache web server, download website files from location and unarchive them to root folder(/var/www/html/)
+  hosts: web
+  become: yes
+  tasks:
+    - name: install httpd
+      yum: name=httpd state=latest
+    - name: start and enable httpd
+      service: name=httpd state=started enabled=yes
+    - name: retrieve website files from location
+      get_url: url=http://example.com/website_files.tgz dest=/tmp/website_files.tgz
+    - name: install website files
+      unarchive: remote_src=yes src=/tmp/website_files.tgz dest=/var/www/html/
