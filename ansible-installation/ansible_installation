@@ -50,6 +50,9 @@ ssh-keygen
 ssh-copy-id managed_node
 
 #after copying the SSH key, we test that a password is no longer needed to connect to the managed node
+
+ssh managed_node
+
 #and logout out of it
 
 logout
@@ -74,3 +77,36 @@ logout
 #on the control node, if you aren't already logged as ansible user, please switch to it(sudo su - ansible) and create a small inventory file
 
 vim /home/ansible/inventory
+
+#add the name of the managed node in the first line and then save the file(:wq)
+#or you could just write a command: echo "managed_node" > /home/ansible/inventory
+#either way, works fine
+
+#now we need to create an Ansible playbook on the control node, then execute it to install git on the managed node
+
+vim /home/ansible/install-git.yml
+
+#add the following text to the playbook
+
+--- # install git on managed node
+
+- hosts: managed_node
+  become: yes
+  tasks:
+  - name: install git
+    yum:
+    name: git
+    state: latest
+
+#save the file with :wq then run the playbook
+
+ansible-playbook -i /home/ansible/inventory install-git.yml
+
+#we need verify that the playbook ran successfully
+#we log into the managed node
+
+ssh managed_node
+
+#and check if git is installed
+
+which git
