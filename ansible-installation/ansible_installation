@@ -1,8 +1,52 @@
+#in this project, we are installing ansible on the control node and establish secure communication
+#between the control node and a managed node.
+#for referrence it will be only 1 managed node, but the commands can be replicated on multiple nodes if needed
+#later, in the playbook examples, we will create a playbook that allows creating ansible user(s) and establishing SSH key communication on
+#multiple nodes to eliminate manual work and improve automation
+
 #Installing Ansible on the control node
 #connect to the server(control node) you want to install Ansible on
 
-ssh user@server_ip
+#ssh user@ip_of_control_node
 
 #first we need to install epel-release repository
 
 sudo yum install -y epel-release
+
+#after that we can install Ansible
+
+sudo yum install -y ansible
+
+#after installing Ansible, we need to create an Ansible user on both the
+#control node and also the managed node/s(host/s)
+
+#on the control node
+
+sudo useradd ansible
+sudo passwd ansible
+
+#on the managed node, ssh to it(ssh user@ip_of_managed_node)
+#then create an ansible user on the machine and after that logout to go back to the control node
+
+sudo useradd ansible
+sudo passwd ansible
+
+#write down the password as we will use it later
+logout
+
+#we need to create a public/private key pair, so the ansible user
+#could log #into the managed node without a password
+
+#switch to the ansible user on the control node
+
+sudo su - ansible
+
+#generate a new SSH key(you can accept the default settings by pressing Enter when prompted)
+
+ssh-keygen
+
+#now we copy the SSH key to the managed node, using the password we created above
+
+ssh-copy-id managed_node
+
+#after copying the SSH key, we test that a password is no longer needed to connect to the managed node
