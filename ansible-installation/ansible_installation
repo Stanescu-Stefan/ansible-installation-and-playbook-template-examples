@@ -50,3 +50,27 @@ ssh-keygen
 ssh-copy-id managed_node
 
 #after copying the SSH key, we test that a password is no longer needed to connect to the managed node
+#and logout out of it
+
+logout
+
+#now we need to setup the ansible user on the managed node to be able to sudo command without the need of a password
+
+#login into the managed node - ssh user@ip_of_managed_node
+
+#we need to edit the sudoers file
+
+sudo visudo
+
+#we need to add this line to end of the file: ansible ALL=(ALL) PASSWD: ALL
+
+#save the file(:wq) and logout out of the managed node
+
+logout
+
+#for testing purposes we will create an inventory file and a small playbook on the control node to be able to install something simple
+#like git on the managed node
+
+#on the control node, if you aren't already logged as ansible user, please switch to it(sudo su - ansible) and create a small inventory file
+
+vim /home/ansible/inventory
