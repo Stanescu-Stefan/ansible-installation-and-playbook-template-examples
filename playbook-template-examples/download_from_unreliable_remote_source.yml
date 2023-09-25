@@ -1,0 +1,21 @@
+#download a file from a unreliable remote source. If it was successfull, display that file was downloaded. If the remote
+#source is down, also display this. For every attempt, either successfull or not, display "Attempt completed". And replace
+# a certain regex pattern with a new line
+
+---
+- hosts: web
+  tasks:
+    - name: download list from remote source
+      block:
+        - get_url:
+            url: http://apps.finance.com/list
+            dest: /home/ansible/list
+        - replace:
+            path: /home/ansible/list
+            regexp: "#BLANK"
+            replace: '\n'
+        - debug: msg="File downloaded"
+      rescue:
+        - debug: msg="finance.com appears to be down.  Try again later."
+      always:
+        - debug: msg="Attempt completed."
