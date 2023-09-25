@@ -1,4 +1,4 @@
-#in this project, we are installing ansible on the control node and establish secure communication
+#in this project, we are installing ansible on the control node and establishing secure communication
 #between the control node and a managed node.
 #for referrence it will be only 1 managed node, but the commands can be replicated on multiple nodes if needed
 #later, in the playbook examples, we will create a playbook that allows creating ansible user(s) and establishing SSH key communication on
