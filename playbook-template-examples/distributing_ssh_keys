@@ -1,4 +1,4 @@
-#we will create an ansible play that will distribute ssh public keys
+#we will create an ansible playbook that will distribute ssh public keys
 #we need to create a directory if not already present to place the ansible configuration file
 
 cd ~
