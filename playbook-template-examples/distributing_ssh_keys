@@ -1,0 +1,32 @@
+#we will create an ansible play that will distribute ssh public keys
+#we need to create a directory if not already present to place the ansible configuration file
+
+cd ~
+
+mkdir ansible
+
+cd ansible
+
+vim ansible.cfg
+
+#the config file can be written as an INI format
+
+[defaults]
+inventory=./inventory
+remote_user=root
+
+#save the file, :wq
+#now we can create the inventory file, that is a list of hosts or a host group
+
+vim inventory
+
+#write inside the inventory file the following 192.168.122.[4:5], which represents 2 IPs for 2 hosts
+
+#we can list the hosts by typing the following
+
+ansible all --list-hosts
+
+#we need to connect to the remote hosts to populate the known_hosts
+#in our case we can manually connect to those hosts, but when you have hundreds of hosts, you cant do that
+
+#we can use the sshpass utility
