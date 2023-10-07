@@ -45,7 +45,7 @@ sudo dnf makecache
 sudo dnf install epel-release -y
 sudo dnf install sshpass -y
 
-#we need to add into the ansible.cfg file the following line: host_key_checking = False
+#we need to add into the ansible.cfg file the following line: host_key_checking = False(to bypass EDCSA key fingerprint)
 
 ansible all -u joe -m ping
 
@@ -72,8 +72,37 @@ vim inventory
 
 #If all or some of the hosts have the same password, then you can add the ansible_ssh_pass and ansible_become_pass variables as group variables
 #after this you can run your playbooks without ansible asking for passwords(but this is still a password based connection)
+#after adding all our remote hosts to the known hosts file, we can delete the passwords as we will setup a passwordless connection to our hosts
 
-#we will now setup a passwordless connection to our hosts
+
 #first we need to generate a private/publick key pair
+
+ssh-keygen -t rsa
+
+#we can now create a playbook to deploy our key to our hosts.
+
+vim key.yml
+
+#start writing this
+
+---
+- name: Add Keys to hosts
+  hosts: all
+  tasks:
+  - name: Install Key
+    authorized_key:
+      user: root
+      state: present
+      key: "{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
+
+
+
+#we can run the playbook now
+
+ansible-playbook key.yml
+
+#now we can ssh to that host/s without being asked for a password
+
+ssh 192.168.122.4
 
 
