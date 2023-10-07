@@ -26,7 +26,54 @@ vim inventory
 
 ansible all --list-hosts
 
-#we need to connect to the remote hosts to populate the known_hosts
+#we need to connect to the remote hosts to populate the known_hosts(after the first ssh connection to those hosts(ECDSA key fingerprint))
 #in our case we can manually connect to those hosts, but when you have hundreds of hosts, you cant do that
 
 #we can use the sshpass utility
+
+#for Debian/Ubuntu systems
+
+sudo apt update
+sudo apt install sshpass -y
+
+#for RHEL/Centos systems
+
+#update the DNF package repository cache
+
+sudo dnf makecache
+#install the EPEL repository package
+sudo dnf install epel-release -y
+sudo dnf install sshpass -y
+
+#we need to add into the ansible.cfg file the following line: host_key_checking = False
+
+ansible all -u joe -m ping
+
+#you will get an error with permission denied. After that run the following command
+
+ansible all -u joe --ask-pass -m ping
+
+#you will be asked for the SSH password and the ping will be successfull
+
+#The –ask-pass option will ask for the SSH login password only. To ask for the sudo password write become: True in your yaml playbook
+
+#You can tell Ansible to ask for the sudo password using the –ask-become-pass option while running the playbook
+#You may wish to use password-based SSH and sudo login, but do not want to type in the SSH password and sudo password every time you run a playbook
+#To use password-based SSH login and sudo login without being prompted for the passwords, all you have to do 
+#is add the ansible_ssh_pass and ansible_become_pass host variables or group variables in your inventory file
+#If you have multiple hosts in your inventory file and each of the hosts has different passwords, 
+#then add the ansible_ssh_pass and ansible_become_pass variables as host variables (after each host)
+
+vim inventory
+
+#add this
+
+192.168.122.[4:5] ansible_ssh_pass=password ansible_become_pass=password
+
+#If all or some of the hosts have the same password, then you can add the ansible_ssh_pass and ansible_become_pass variables as group variables
+#after this you can run your playbooks without ansible asking for passwords(but this is still a password based connection)
+
+#we will now setup a passwordless connection to our hosts
+#first we need to generate a private/publick key pair
+
+
