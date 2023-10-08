@@ -1,0 +1,20 @@
+all:
+  children:
+    development:
+      hosts:
+        192.168.122.4: {}
+        192.168.122.5: {}
+    rhel:
+      vars:
+        apache_package: httpd
+      children:
+        rhel8:
+          hosts:
+            192.168.122.6: {}
+    ubuntu:
+      vars:
+        apache_package: apache2
+      children:
+        ubuntu1804:
+          hosts:
+            192.168.122.5: {}
