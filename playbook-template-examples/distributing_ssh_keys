@@ -1,4 +1,4 @@
-#we will create an ansible playbook that will distribute ssh public keys
+#we will create an ansible playbook that will distribute ssh public keys on multiple hosts(more than 2-3)
 #we need to create a directory if not already present to place the ansible configuration file
 
 cd ~
@@ -59,9 +59,9 @@ ansible all -u joe --ask-pass -m ping
 
 #You can tell Ansible to ask for the sudo password using the –ask-become-pass option while running the playbook
 #You may wish to use password-based SSH and sudo login, but do not want to type in the SSH password and sudo password every time you run a playbook
-#To use password-based SSH login and sudo login without being prompted for the passwords, all you have to do 
+#To use password-based SSH login and sudo login without being prompted for the passwords, all you have to do
 #is add the ansible_ssh_pass and ansible_become_pass host variables or group variables in your inventory file
-#If you have multiple hosts in your inventory file and each of the hosts has different passwords, 
+#If you have multiple hosts in your inventory file and each of the hosts has different passwords,
 #then add the ansible_ssh_pass and ansible_become_pass variables as host variables (after each host)
 
 vim inventory
@@ -74,7 +74,6 @@ vim inventory
 #after this you can run your playbooks without ansible asking for passwords(but this is still a password based connection)
 #after adding all our remote hosts to the known hosts file, we can delete the passwords as we will setup a passwordless connection to our hosts
 
-
 #first we need to generate a private/publick key pair
 
 ssh-keygen -t rsa
@@ -86,16 +85,15 @@ vim key.yml
 #start writing this
 
 ---
+
 - name: Add Keys to hosts
   hosts: all
   tasks:
   - name: Install Key
     authorized_key:
-      user: root
-      state: present
-      key: "{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
-
-
+    user: root
+    state: present
+    key: "{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
 
 #we can run the playbook now
 
@@ -104,5 +102,3 @@ ansible-playbook key.yml
 #now we can ssh to that host/s without being asked for a password
 
 ssh 192.168.122.4
-
-
