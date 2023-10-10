@@ -1,0 +1,4 @@
+---
+- name: Deploy Ansible User
+  hosts: all
+  tasks:
