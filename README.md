@@ -23,4 +23,7 @@ syntax=on
 "ts is tab stop and in our case we set it to 2 spaces
 "sw is shift width and we set it to 2, this is used for autoindent
 "et is the expand tab so that when we hit the TAB key, those tabs are translated into spaces and stored as spaces into our file
-autocmd FileType yaml setlocal ai ts=2 sw=2 et
+"nu is automatic line numbering
+"cuc is cursorcolumn which turns on a vertical cursor column highlight
+"cul is cursorline which is the horizontal equivalent of it
+autocmd FileType yaml setlocal ai ts=2 sw=2 et nu cuc cul
