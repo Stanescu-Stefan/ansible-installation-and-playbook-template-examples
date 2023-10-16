@@ -1,0 +1,41 @@
+- name: Install Packages Playbook
+  hosts: all
+  vars:
+    packages:
+      - name: nginx
+        required: True
+      - name: mysql
+        require: True
+      - name: apache
+        required: False
+
+  tasks:
+    - name: Install "{{ item.name }}" on Debian
+      apt:
+        name: "{{ item.name }}"
+        state: present
+      when: item.required == True
+      loop: "{{ packages }}"
+
+- name: Check status of a service and email if its down
+  hosts: all
+  tasks:
+    - name: Checking httpd service status
+      command: service httpd status
+      register: result
+
+    - name: Send email that httpd service is down
+      mail:
+        to: admin@company.com
+        subject: Service alert
+        body: Httpd Service is Down
+        when: result.stdout.find('down') != -1
+
+- name: Install git on Ubuntu 18.04
+  hosts: all
+  tasks:
+    - name: Install git on Ubuntu 18.04
+      apt:
+        name: git
+        state: present
+        when: ansible_facts['os_family'] == 'Debian' and ansible_facts['distribution_major_version'] == '18'
